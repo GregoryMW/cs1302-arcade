@@ -15,7 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.image.*;
 import javafx.scene.control.*;
-import javafx.geometry.Pos;
+import javafx.geometry.*;
 
 public class ArcadeApp extends Application {
 
@@ -25,14 +25,20 @@ public class ArcadeApp extends Application {
 
     public void startMenu()
         {
-            Image sIPic = new Image("SpaceInvadersLogo.jpg", 250, 250, false, true);
+            Image sIPic = new Image("SpaceInvadersLogo.jpg", 200, 200, false, true);
             ImageView logo = new ImageView(sIPic);
             Button sIStart = new Button();
             sIStart.setGraphic(logo);
-            Image twenty48Pic = new Image("2048Logo.png", 250, 250, false, true);
+            Image twenty48Pic = new Image("2048Logo.png", 200, 200, false, true);
             ImageView logo2 = new ImageView(twenty48Pic);
             Button twenty48Start = new Button();
             twenty48Start.setGraphic(logo2);
+            Image backgroundPic = new Image("retroBG.jpg", 640, 480, false, true);
+            menuScreen.setBackground(
+                new Background(new BackgroundImage(
+                                   backgroundPic,BackgroundRepeat.NO_REPEAT,
+                                   BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                                   BackgroundSize.DEFAULT)));
 
             menuScreen.setAlignment(Pos.CENTER);
             spaceInvaderOpt.getChildren().add(sIStart);
@@ -96,6 +102,7 @@ public class ArcadeApp extends Application {
         stage.setTitle("cs1302-arcade!");
         stage.setScene(scene);
         stage.sizeToScene();
+        stage.setResizable(false);
         stage.show();
 
         // the group must request input focus to receive key events
