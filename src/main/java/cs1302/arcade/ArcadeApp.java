@@ -12,8 +12,35 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.scene.image.*;
+import javafx.scene.control.*;
+import javafx.geometry.Pos;
 
 public class ArcadeApp extends Application {
+
+    HBox menuScreen = new HBox(20);
+    VBox spaceInvaderOpt = new VBox();
+    VBox twenty48Opt = new VBox(40);
+
+    public void startMenu()
+        {
+            Image sIPic = new Image("SpaceInvadersLogo.jpg", 250, 250, false, true);
+            ImageView logo = new ImageView(sIPic);
+            Button sIStart = new Button();
+            sIStart.setGraphic(logo);
+            Image twenty48Pic = new Image("2048Logo.png", 250, 250, false, true);
+            ImageView logo2 = new ImageView(twenty48Pic);
+            Button twenty48Start = new Button();
+            twenty48Start.setGraphic(logo2);
+
+            menuScreen.setAlignment(Pos.CENTER);
+            spaceInvaderOpt.getChildren().add(sIStart);
+            spaceInvaderOpt.setAlignment(Pos.CENTER);
+            twenty48Opt.getChildren().add(twenty48Start);
+            twenty48Opt.setAlignment(Pos.CENTER);
+            menuScreen.getChildren().addAll(spaceInvaderOpt, twenty48Opt);
+        }
 
     Group group = new Group();           // main container
     Random rng = new Random();           // random number generator
@@ -63,7 +90,9 @@ public class ArcadeApp extends Application {
         r.setOnMouseClicked(createMouseHandler()); // clicks on the rectangle move it randomly
         group.setOnKeyPressed(createKeyHandler()); // left-right key presses move the rectangle
 
-        Scene scene = new Scene(group, 640, 480);
+        startMenu();
+
+        Scene scene = new Scene(menuScreen, 640, 480);
         stage.setTitle("cs1302-arcade!");
         stage.setScene(scene);
         stage.sizeToScene();
