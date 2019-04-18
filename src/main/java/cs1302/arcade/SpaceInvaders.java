@@ -14,11 +14,16 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.image.*;
 import javafx.scene.control.*;
+import javafx.scene.paint.*;
+import javafx.scene.canvas.*;
 import javafx.geometry.*;
 
 public class SpaceInvaders extends ArcadeApp
 {
-    Scene spaceInvaders;
+    Group screen = new Group();
+    Scene spaceInvaders = new Scene(screen, 640, 480, Color.BLACK);
+    
+    
 
     public Scene getScene()
         {
