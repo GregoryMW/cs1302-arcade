@@ -31,6 +31,7 @@ public class SpaceInvaders extends ArcadeApp
         spaceInvaders = new Scene(screen, 640, 480, Color.BLACK);
         background = new Pane();
         invaders = new ArrayList<>();
+        addInvaders();
 
         screen.getChildren().add(background);
         
@@ -41,10 +42,19 @@ public class SpaceInvaders extends ArcadeApp
             return spaceInvaders;
         }
 
-    public void addInvaders(){
-        for(int i = 0; i < 20; i++){
-            invaders.add(new ImageView("Alien1.png"));
-            background.getChildren().add(invaders.get(i)); 
+    public void addInvaders()
+        {
+            Image alien1 = new Image("Alien1.png", 30, 30, false, true);
+            int count = 0;
+            for(int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 4; j ++)
+                {
+                    invaders.add(new ImageView(alien1));
+                    invaders.get(count).relocate(25 + i * 50, 20 + j * 30);
+                    background.getChildren().add(invaders.get(count));
+                    count ++;
+                }
+            }
         }
-    }
 }

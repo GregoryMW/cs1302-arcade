@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -17,10 +18,11 @@ import javafx.scene.control.*;
 import javafx.geometry.*;
 
 public class ArcadeApp extends Application {
-
+    
     HBox menuScreen = new HBox(20);
     VBox spaceInvaderOpt = new VBox();
     VBox twenty48Opt = new VBox(40);
+    //SpaceInvaders spaceInvaders = new SpaceInvaders();
 
     public void startMenu()
         {
@@ -28,6 +30,7 @@ public class ArcadeApp extends Application {
             ImageView logo = new ImageView(sIPic);
             Button sIStart = new Button();
             sIStart.setGraphic(logo);
+            //sIStart.setOnAction(switchToSI());
             Image twenty48Pic = new Image("2048Logo.png", 200, 200, false, true);
             ImageView logo2 = new ImageView(twenty48Pic);
             Button twenty48Start = new Button();
@@ -46,6 +49,16 @@ public class ArcadeApp extends Application {
             twenty48Opt.setAlignment(Pos.CENTER);
             menuScreen.getChildren().addAll(spaceInvaderOpt, twenty48Opt);
         }
+    /**
+    public EventHandler<ActionEvent> switchToSI()
+        {
+            EventHandler<ActionEvent> handler = e ->
+            {
+                app.setScene(spaceInvaders.getScene());
+            };
+            return handler;
+        }
+    */
 
     Group group = new Group();           // main container
     Random rng = new Random();           // random number generator
@@ -96,7 +109,7 @@ public class ArcadeApp extends Application {
         group.setOnKeyPressed(createKeyHandler()); // left-right key presses move the rectangle
 
         startMenu();
-
+        
         Scene scene = new Scene(menuScreen, 640, 480);
         stage.setTitle("cs1302-arcade!");
         stage.setScene(scene);
