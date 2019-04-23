@@ -28,3 +28,16 @@ Here is a sample entry (delete this line; also: feel free to copy/paste/modify):
 
 3. **PROB:** Deciding how to display the game, using multiple imageviews in each array space, or
     some other way.
+
+## TUE 2019-04-23 @ 11:00 AM EST
+
+1. **DONE:** Began work on the Space Invaders game. Created the images for the aliens as well
+    as the ship, made the ship able to be moved by the left and right arrow keys and the aliens
+    move every two seconds.
+
+2. **TODO:** Add bounds to the aliens so that they move down a row at the edge of the screen,
+    then move in the other direction. Also need to start work on the 2048 game as well.
+
+3. **PROB:** Keeping track of where the last alien in a row is and using that to check the bounds
+    is a bit tricky due to the way the images are stored. May have to rework the way images are placed
+    in the scene.                
