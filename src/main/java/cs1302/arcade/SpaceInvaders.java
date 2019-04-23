@@ -32,6 +32,7 @@ public class SpaceInvaders extends Application
     ImageView ship;
     KeyFrame keyFrame;
     Timeline timeline;
+    int counter;
 
     /**
      *  Initial setup for the space invader game
@@ -87,10 +88,11 @@ public class SpaceInvaders extends Application
     }
 
     /**
-     *  Moves the aliens every n number of seconds 
+     *  Moves the aliens right every n number of seconds 
      *  based on the level of the game
      */
-    private void moveAliens(){
+    private void moveAliensRight(){
+                
         EventHandler<ActionEvent> moveAliens = e -> {
             invaders.stream().forEach(a -> {
                     a.setX(a.getX() + 10.0);
@@ -111,7 +113,7 @@ public class SpaceInvaders extends Application
             setup();
             screen.setOnKeyPressed(moveShip());
             screen.requestFocus();
-            moveAliens();
+            moveAliensRight();
             stage.setTitle("Space Invaders");
             stage.setScene(spaceInvaders);
             stage.sizeToScene();
