@@ -19,27 +19,21 @@ import javafx.scene.canvas.*;
 import javafx.geometry.*;
 import java.util.ArrayList; 
 
-public class SpaceInvaders extends ArcadeApp
+public class SpaceInvaders extends Application
 {
     Group screen;
     Scene spaceInvaders;
     Pane background;
     ArrayList<ImageView> invaders;
     
-    public SpaceInvaders(){
-        screen = new Group();
-        spaceInvaders = new Scene(screen, 640, 480, Color.BLACK);
-        background = new Pane();
-        invaders = new ArrayList<>();
-        addInvaders();
-
-        screen.getChildren().add(background);
-        
-    }
-
-    public Scene getScene()
+    public void setup()
         {
-            return spaceInvaders;
+            screen = new Group();
+            spaceInvaders = new Scene(screen, 640, 480, Color.BLACK);
+            background = new Pane();
+            invaders = new ArrayList<ImageView>();
+            addInvaders();
+            screen.getChildren().add(background);
         }
 
     public void addInvaders()
@@ -57,4 +51,17 @@ public class SpaceInvaders extends ArcadeApp
                 }
             }
         }
+
+    /** {@inheritdoc} */
+    @Override
+    public void start(Stage stage)
+        {
+            setup();
+            stage.setTitle("Space Invaders");
+            stage.setScene(spaceInvaders);
+            stage.sizeToScene();
+            stage.setResizable(false);
+            stage.show();
+
+        } // start
 }

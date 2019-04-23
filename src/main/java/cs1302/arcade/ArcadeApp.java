@@ -17,12 +17,13 @@ import javafx.scene.image.*;
 import javafx.scene.control.*;
 import javafx.geometry.*;
 
-public class ArcadeApp extends Application {
-    
+public class ArcadeApp extends Application
+{
     HBox menuScreen = new HBox(20);
     VBox spaceInvaderOpt = new VBox();
     VBox twenty48Opt = new VBox(40);
-    //SpaceInvaders spaceInvaders = new SpaceInvaders();
+    SpaceInvaders spaceInvaders = new SpaceInvaders();
+    Stage app;
 
     public void startMenu()
         {
@@ -30,7 +31,7 @@ public class ArcadeApp extends Application {
             ImageView logo = new ImageView(sIPic);
             Button sIStart = new Button();
             sIStart.setGraphic(logo);
-            //sIStart.setOnAction(switchToSI());
+            sIStart.setOnAction(launchSI());
             Image twenty48Pic = new Image("2048Logo.png", 200, 200, false, true);
             ImageView logo2 = new ImageView(twenty48Pic);
             Button twenty48Start = new Button();
@@ -41,7 +42,6 @@ public class ArcadeApp extends Application {
                                    backgroundPic,BackgroundRepeat.NO_REPEAT,
                                    BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                                    BackgroundSize.DEFAULT)));
-
             menuScreen.setAlignment(Pos.CENTER);
             spaceInvaderOpt.getChildren().add(sIStart);
             spaceInvaderOpt.setAlignment(Pos.CENTER);
@@ -49,16 +49,19 @@ public class ArcadeApp extends Application {
             twenty48Opt.setAlignment(Pos.CENTER);
             menuScreen.getChildren().addAll(spaceInvaderOpt, twenty48Opt);
         }
-    /**
-    public EventHandler<ActionEvent> switchToSI()
+
+    public EventHandler<ActionEvent> launchSI()
         {
             EventHandler<ActionEvent> handler = e ->
-            {
-                app.setScene(spaceInvaders.getScene());
-            };
+                {
+                    Thread t = new Thread(() -> {
+                            Platform.runLater(() -> new SpaceInvaders().start(new Stage()));
+                    });
+                    t.setDaemon(true);
+                    t.start();
+                };
             return handler;
         }
-    */
 
     Group group = new Group();           // main container
     Random rng = new Random();           // random number generator
@@ -94,33 +97,18 @@ public class ArcadeApp extends Application {
 
     /** {@inheritdoc} */
     @Override
-    public void start(Stage stage) {
-
-        /* You are allowed to rewrite this start method, add other methods,
-         * files, classes, etc., as needed. This currently contains some
-         * simple sample code for mouse and keyboard interactions with a node
-         * (rectangle) in a group.
-         */
-
-        r.setX(50);                                // 50px in the x direction (right)
-        r.setY(50);                                // 50ps in the y direction (down)
-        group.getChildren().add(r);                // add to main container
-        r.setOnMouseClicked(createMouseHandler()); // clicks on the rectangle move it randomly
-        group.setOnKeyPressed(createKeyHandler()); // left-right key presses move the rectangle
-
-        startMenu();
+    public void start(Stage stage)
+        {
+            app = stage;
+            startMenu();
         
-        Scene scene = new Scene(menuScreen, 640, 480);
-        stage.setTitle("cs1302-arcade!");
-        stage.setScene(scene);
-        stage.sizeToScene();
-        stage.setResizable(false);
-        stage.show();
+            Scene scene = new Scene(menuScreen, 640, 480);
+            app.setTitle("cs1302-arcade!");
+            app.setScene(scene);
+            app.sizeToScene();
+            app.setResizable(false);
+            app.show();
 
-        // the group must request input focus to receive key events
-        // @see https://docs.oracle.com/javase/8/javafx/api/javafx/scene/Node.html#requestFocus--
-        group.requestFocus();
-
-    } // start
+        } // start
 
 } // ArcadeApp
