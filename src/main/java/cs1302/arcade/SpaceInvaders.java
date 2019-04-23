@@ -18,6 +18,10 @@ import javafx.scene.paint.*;
 import javafx.scene.canvas.*;
 import javafx.geometry.*;
 import java.util.ArrayList; 
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.event.ActionEvent;
+import javafx.util.Duration;
 
 public class SpaceInvaders extends Application
 {
@@ -26,8 +30,14 @@ public class SpaceInvaders extends Application
     Pane background;
     ArrayList<ImageView> invaders;
     ImageView ship;
+    KeyFrame keyFrame;
+    Timeline timeline;
+
+    /**
+     *  Initial setup for the space invader game
+     */
     
-    public void setup()
+    private void setup()
         {
             screen = new Group();
             spaceInvaders = new Scene(screen, 640, 480, Color.BLACK);
@@ -37,7 +47,10 @@ public class SpaceInvaders extends Application
             screen.getChildren().add(background);
         }
 
-    public void addInvaders()
+    /**
+     *  Add invaders and the ship to the scene
+     */
+    private void addInvaders()
         {
             Image alien1 = new Image("Alien1.png", 30, 30, false, true);
             Image shipPic = new Image("Ship.png", 50, 30, true, true);
@@ -73,6 +86,24 @@ public class SpaceInvaders extends Application
         };
     }
 
+    /**
+     *  Moves the aliens every n number of seconds 
+     *  based on the level of the game
+     */
+    private void moveAliens(){
+        EventHandler<ActionEvent> moveAliens = e -> {
+            invaders.stream().forEach(a -> {
+                    a.setX(a.getX() + 10.0);
+                });
+        };
+        
+        keyFrame = new KeyFrame(Duration.seconds(2), moveAliens);
+        timeline = new Timeline();
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.play();        
+    }
+
     /** {@inheritdoc} */
     @Override
     public void start(Stage stage)
@@ -80,6 +111,7 @@ public class SpaceInvaders extends Application
             setup();
             screen.setOnKeyPressed(moveShip());
             screen.requestFocus();
+            moveAliens();
             stage.setTitle("Space Invaders");
             stage.setScene(spaceInvaders);
             stage.sizeToScene();
