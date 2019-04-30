@@ -141,28 +141,29 @@ public class SpaceInvaders extends Application
             bullet = new ImageView(bulletPic);
             background.getChildren().add(bullet);
             bullet.setX(ship.getX() + 25);
-            bullet.setY(ship.getY() - 30);
-            System.out.println("test");
+            bullet.setY(ship.getY() - 25);
             fireBullet();
         }
 
     public void fireBullet()
         {
-            EventHandler<ActionEvent> moveBullet = e -> {
-                Thread t = new Thread (() -> {
-                        while (bullet.getY() > 0)
+            Thread t = new Thread (() -> {
+                    EventHandler<ActionEvent> moveBullet = e -> {
+                        Platform.runLater(() -> bullet.setY(bullet.getY() - 5));
+                        if (bullet.getY() < 0)
                         {
-                            Platform.runLater(() -> bullet.setY(bullet.getY() - 5));
+                            Platform.runLater(() -> background.getChildren().remove(bullet));
+                            timeline.stop();
                         }
-                });
-                t.setDaemon(true);
-                t.start();
-            };
-            keyFrame = new KeyFrame(Duration.seconds(1), moveBullet);
-            timeline = new Timeline();
-            timeline.setCycleCount(Timeline.INDEFINITE);
-            timeline.getKeyFrames().add(keyFrame);
-            timeline.play();
+                    };
+                    keyFrame = new KeyFrame(Duration.seconds(0.01), moveBullet);
+                    timeline = new Timeline();
+                    timeline.setCycleCount(Timeline.INDEFINITE);
+                    timeline.getKeyFrames().add(keyFrame);
+                    timeline.play();
+            });
+            t.setDaemon(true);
+            t.start();
         }
     
     private EventHandler<? super KeyEvent> inputCheck()
@@ -171,7 +172,10 @@ public class SpaceInvaders extends Application
                 {
                     if (event.getCode() == KeyCode.SPACE)
                     {
-                        makeBullet();
+                        if (background.getChildren().contains(bullet) == false)
+                        {
+                            makeBullet();
+                        }
                     }
                     else if (event.getCode() == KeyCode.LEFT ||
                              event.getCode() == KeyCode.RIGHT);
