@@ -67,7 +67,8 @@ public class SpaceInvaders extends Application
                 for (int j = 0; j < 4; j ++)
                 {
                     invaders.add(new ImageView(alien1));
-                    invaders.get(count).relocate(25 + i * 50, 20 + j * 30); 
+                    invaders.get(count).setX(25 + i * 50);
+                    invaders.get(count).setY(20 + j * 30);
                     background.getChildren().add(invaders.get(count));
                     count ++;
                 }
@@ -92,29 +93,40 @@ public class SpaceInvaders extends Application
      *  based on the level of the game
      */
     private void moveAliens(){
-        if(counter % 2 == 0){
-            invaders.stream().forEach(a -> {
-                    Platform.runLater(() -> a.setX(a.getX() + 10.0));
-                });
-            if(invaders.get(10).getX() > 100){
-                increaseCounter();
-                invaders.stream().forEach(a -> {
-                        Platform.runLater(() -> a.setY(a.getY() + 10.0));
-                    });
-            }
-        }
-        else if(counter % 2 == 1){ 
-            invaders.stream().forEach(a -> {
-                    Platform.runLater(() -> a.setX(a.getX() - 10.0));
-                });
-            if(invaders.get(1).getX() < 10){
-                increaseCounter();
-                invaders.stream().forEach(a -> {
-                        Platform.runLater(() -> a.setY(a.getY() + 10.0));
-                    });
-            }
-        }
-                   
+        EventHandler<ActionEvent> moveAliens = e -> {
+            Runnable r = () -> {
+                if(counter % 2 == 0){
+                    invaders.stream().forEach(a -> {
+                            Platform.runLater(() -> a.setX(a.getX() + 10.0));
+                        });
+                    if(invaders.get(10).getX() > 220){
+                        increaseCounter();
+                        invaders.stream().forEach(a -> {
+                            Platform.runLater(() -> a.setY(a.getY() + 10.0));
+                        });
+                    }
+                }
+                else if(counter % 2 == 1){ 
+                    invaders.stream().forEach(a -> {
+                            Platform.runLater(() -> a.setX(a.getX() - 10.0));
+                        });
+                    if(invaders.get(1).getX() < 20){
+                        increaseCounter();
+                        invaders.stream().forEach(a -> {
+                            Platform.runLater(() -> a.setY(a.getY() + 10.0));
+                        });
+                    }
+                }
+            };
+            Thread t = new Thread(r);
+            t.setDaemon(true);
+            t.start();
+        };
+        keyFrame = new KeyFrame(Duration.seconds(0.25), moveAliens);
+        timeline = new Timeline();
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.play();
     }
 
     /**
@@ -139,27 +151,41 @@ public class SpaceInvaders extends Application
             fireBullet();
         }
 
-    /** 
-     *  Makes the bullet move through the scene when fired
-     */
-    private void fireBullet(){
-        bullet.setY(bullet.getY() - 5);
-        bullet.setY(bullet.getY() - 5);
-        bullet.setY(bullet.getY() - 5);
-        bullet.setY(bullet.getY() - 5);
-        System.out.println(bullet.getY());
-    }
-    
+    public void fireBullet()
+        {
+            Thread t = new Thread (() -> {
+                    EventHandler<ActionEvent> moveBullet = e -> {
+                        Platform.runLater(() -> bullet.setY(bullet.getY() - 5));
+                        invaders.stream().forEach(a -> {
+                                Platform.runLater(() -> collision(a));});
+                        if (bullet.getY() < 0)
+                        {
+                            Platform.runLater(() -> background.getChildren().remove(bullet));
+                            timeline.stop();
+                        }
+                    };
+                    keyFrame = new KeyFrame(Duration.seconds(0.025), moveBullet);
+                    timeline = new Timeline();
+                    timeline.setCycleCount(Timeline.INDEFINITE);
+                    timeline.getKeyFrames().add(keyFrame);
+                    timeline.play();
+            });
+            t.setDaemon(true);
+            t.start();
+        }
+
     /**
      *  Detects the collision of two ImageView objects with in the scene
      *  {@return boolean} Tells if two objects interact with each other 
      */
-    private void collision(ImageView alien, ImageView bullet){
+    private void collision(ImageView alien){
         if(bullet.getBoundsInParent().intersects(alien.getBoundsInParent())){
             System.out.println("Hit");
+            timeline.stop();
             background.getChildren().remove(bullet);
             int index = invaders.indexOf(alien);
-            invaders.set(index, new ImageView());            
+            invaders.remove(index);
+            background.getChildren().remove(alien);
         }
     }
     
@@ -182,33 +208,13 @@ public class SpaceInvaders extends Application
                 }
             };
         }
-
-    /**
-     *  Plays the game of space invaders
-     */
-    private void play(){
-        setup();
-        Thread
-        EventHandler<ActionEvent> playGame = e -> {
-            Runnable r = () -> {
-                moveAliens();
-            };
-        };
-        Thread t = new Thread(r);
-        t.setDaemon(true);
-        t.start();
-        keyFrame = new KeyFrame(Duration.seconds(0.25), playGame);
-        timeline = new Timeline();
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.getKeyFrames().add(keyFrame);
-        timeline.play();        
-    }
     
     /** {@inheritdoc} */
     @Override
     public void start(Stage stage)
         {
-            play();
+            setup();
+            moveAliens();
             screen.requestFocus();
             screen.setOnKeyPressed(inputCheck());
             stage.setTitle("Space Invaders");
@@ -216,7 +222,5 @@ public class SpaceInvaders extends Application
             stage.sizeToScene();
             stage.setResizable(false);
             stage.show();
-            
-
         } // start
 }
