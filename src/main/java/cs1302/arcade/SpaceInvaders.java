@@ -40,6 +40,7 @@ public class SpaceInvaders extends Application
     
     private void setup()
         {
+            counter = 0;
             screen = new Group();
             spaceInvaders = new Scene(screen, 640, 480, Color.BLACK);
             background = new Pane();
@@ -88,24 +89,60 @@ public class SpaceInvaders extends Application
     }
 
     /**
-     *  Moves the aliens right every n number of seconds 
+     *  Moves the aliens every n number of seconds 
      *  based on the level of the game
      */
-    private void moveAliensRight(){
+    private void moveAliens(){
                 
         EventHandler<ActionEvent> moveAliens = e -> {
-            invaders.stream().forEach(a -> {
-                    a.setX(a.getX() + 10.0);
-                });
+            Runnable r = () -> {
+                if(counter % 2 == 0){
+                    invaders.stream().forEach(a -> {
+                            Platform.runLater(() -> a.setX(a.getX() + 10.0));
+                        });
+                    if(invaders.get(10).getX() > 100){
+                        increaseCounter();
+                        invaders.stream().forEach(a -> {
+                            Platform.runLater(() -> a.setY(a.getY() + 10.0));
+                        });
+                    }
+                }
+                else if(counter % 2 == 1){
+                    
+                    invaders.stream().forEach(a -> {
+                            Platform.runLater(() -> a.setX(a.getX() - 10.0));
+                        });
+                    if(invaders.get(1).getX() < 10){
+                        increaseCounter();
+                        invaders.stream().forEach(a -> {
+                            Platform.runLater(() -> a.setY(a.getY() + 10.0));
+                        });
+                    }
+                }
+            };
+
+            Thread t = new Thread(r);
+            t.setDaemon(true);
+            t.start();
         };
         
-        keyFrame = new KeyFrame(Duration.seconds(2), moveAliens);
+        keyFrame = new KeyFrame(Duration.seconds(0.25), moveAliens);
         timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.getKeyFrames().add(keyFrame);
         timeline.play();        
     }
 
+    /**
+     *  Increases the counter to help keep track of how far down the
+     *  aliens have moved in the game.
+     *  {@param count} counter to be increased
+     *  {@return int} new value of the counter 
+     */
+    private void increaseCounter(){
+        counter++;
+    }
+    
     /** {@inheritdoc} */
     @Override
     public void start(Stage stage)
@@ -113,7 +150,7 @@ public class SpaceInvaders extends Application
             setup();
             screen.setOnKeyPressed(moveShip());
             screen.requestFocus();
-            moveAliensRight();
+            moveAliens();
             stage.setTitle("Space Invaders");
             stage.setScene(spaceInvaders);
             stage.sizeToScene();
