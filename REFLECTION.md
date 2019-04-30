@@ -40,4 +40,15 @@ Here is a sample entry (delete this line; also: feel free to copy/paste/modify):
 
 3. **PROB:** Keeping track of where the last alien in a row is and using that to check the bounds
     is a bit tricky due to the way the images are stored. May have to rework the way images are placed
-    in the scene.                
+    in the scene.
+
+## TUE 2019-04-30 @ 7:00 PM EST
+
+1. **DONE:** Completed most of the work on the Space Invaders game. ALien movement, bullet mechanics,
+    as well as collision detection and ship movement.
+
+2. **TODO:** Implement shooting aliens, scoreboard, and difficulty increase upon completeion of a level.
+    Also need to fix alien movement a bit. Also need to begin work on 2048 game.
+
+3. **PROB:** Had issues with git not moving the master branch with the HEAD branch. Not much with the
+    game itself.              
