@@ -136,6 +136,7 @@ public class SpaceInvaders extends Application
             background.getChildren().add(bullet);
             bullet.setX(ship.getX() + 25);
             bullet.setY(ship.getY() - 25);
+            fireBullet();
         }
 
     /** 
@@ -156,14 +157,11 @@ public class SpaceInvaders extends Application
     private void collision(ImageView alien, ImageView bullet){
         if(bullet.getBoundsInParent().intersects(alien.getBoundsInParent())){
             System.out.println("Hit");
-
             background.getChildren().remove(bullet);
             int index = invaders.indexOf(alien);
             invaders.set(index, new ImageView());            
         }
     }
-                
-           
     
     private EventHandler<? super KeyEvent> inputCheck()
         {
@@ -190,20 +188,15 @@ public class SpaceInvaders extends Application
      */
     private void play(){
         setup();
+        Thread
         EventHandler<ActionEvent> playGame = e -> {
             Runnable r = () -> {
                 moveAliens();
-                if(background.getChildren().contains(bullet) == true){
-                    fireBullet();
-                    if(bullet.getY() < 0){
-                        background.getChildren().remove(bullet);
-                    }
-                }
             };
-            Thread t = new Thread(r);
-            t.setDaemon(true);
-            t.start();
         };
+        Thread t = new Thread(r);
+        t.setDaemon(true);
+        t.start();
         keyFrame = new KeyFrame(Duration.seconds(0.25), playGame);
         timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
