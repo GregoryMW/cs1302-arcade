@@ -338,7 +338,7 @@ public class SpaceInvaders extends Application
     public void start(Stage stage)
         {
             setup();
-            moveAliens(0.1);
+            moveAliens(0.5);
             screen.requestFocus();
             screen.setOnKeyPressed(inputCheck());
             stage.setTitle("Space Invaders");

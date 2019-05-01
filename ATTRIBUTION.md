@@ -20,3 +20,10 @@ authored by members of your project team.
 * 125Scratch. "Arcade - Space Invaders - Game Graphics and Color Overlays"
 * https://www.spriters-resource.com/arcade/spaceinv/sheet/115520/
 * Creative Commons Attribution 3.0 Unported (CC BY 3.0)
+
+## Crash
+* `src/main/resources/Bullet.png`
+* 125Scratch. "Arcade - Space Invaders - Game Graphics and Color Overlays"
+* https://www.spriters-resource.com/arcade/spaceinv/sheet/115520/
+* Creative Commons Attribution 3.0 Unported (CC BY 3.0)
+
