@@ -16,6 +16,7 @@ import javafx.scene.layout.*;
 import javafx.scene.image.*;
 import javafx.scene.control.*;
 import javafx.geometry.*;
+import javafx.stage.WindowEvent;
 
 public class ArcadeApp extends Application
 {
@@ -24,17 +25,21 @@ public class ArcadeApp extends Application
     VBox twenty48Opt = new VBox(40);
     SpaceInvaders spaceInvaders = new SpaceInvaders();
     Stage app;
+    Stage spi;
+    Stage tfe;
+    Button sIStart;
+    Button twenty48Start;
 
     public void startMenu()
         {
             Image sIPic = new Image("SpaceInvadersLogo.jpg", 200, 200, false, true);
             ImageView logo = new ImageView(sIPic);
-            Button sIStart = new Button();
+            sIStart = new Button();
             sIStart.setGraphic(logo);
             sIStart.setOnAction(launchSI());
             Image twenty48Pic = new Image("2048Logo.png", 200, 200, false, true);
             ImageView logo2 = new ImageView(twenty48Pic);
-            Button twenty48Start = new Button();
+            twenty48Start = new Button();
             twenty48Start.setGraphic(logo2);
             Image backgroundPic = new Image("retroBG.jpg", 640, 480, false, true);
             menuScreen.setBackground(
@@ -52,10 +57,13 @@ public class ArcadeApp extends Application
 
     public EventHandler<ActionEvent> launchSI()
         {
+            spi = new Stage();
             EventHandler<ActionEvent> handler = e ->
                 {
                     Thread t = new Thread(() -> {
-                            Platform.runLater(() -> new SpaceInvaders().start(new Stage()));
+                            Platform.runLater(() -> new SpaceInvaders().start(spi));
+                            sIStart.setDisable(true);
+                            twenty48Start.setDisable(true);
                     });
                     t.setDaemon(true);
                     t.start();
@@ -101,7 +109,11 @@ public class ArcadeApp extends Application
         {
             app = stage;
             startMenu();
-        
+
+            spi.setOnCloseRequest((WindowEvent event1) -> {
+                    sIStart.setDisable(false);
+                    twenty48Start.setDisable(false);
+                });
             Scene scene = new Scene(menuScreen, 640, 480);
             app.setTitle("cs1302-arcade!");
             app.setScene(scene);
