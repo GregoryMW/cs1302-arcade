@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.text.*;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
@@ -35,12 +36,16 @@ public class SpaceInvaders extends Application
     KeyFrame keyFrame;
     Timeline timeline;
     int counter;
+    int s;
+    Text score;
 
     /**
      *  Initial setup for the space invader game
      */
     private void setup()
         {
+            s = 0;
+            score = new Text("Score: " + s);
             counter = 0;
             screen = new Group();
             spaceInvaders = new Scene(screen, 640, 480, Color.BLACK);
@@ -48,6 +53,9 @@ public class SpaceInvaders extends Application
             invaders = new ArrayList<ImageView>();
             addInvaders();
             screen.getChildren().add(background);
+            background.getChildren().add(score);
+            score.setX(50);
+            score.setY(50);
         }
 
     /**
@@ -180,8 +188,9 @@ public class SpaceInvaders extends Application
      */
     private void collision(ImageView alien){
         if(bullet.getBoundsInParent().intersects(alien.getBoundsInParent())){
-            System.out.println("Hit");
             timeline.stop();
+            s += 10;
+            score.setText("Score: " + s);
             background.getChildren().remove(bullet);
             int index = invaders.indexOf(alien);
             invaders.remove(index);
