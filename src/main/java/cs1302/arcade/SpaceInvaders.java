@@ -54,8 +54,9 @@ public class SpaceInvaders extends Application
             addInvaders();
             screen.getChildren().add(background);
             background.getChildren().add(score);
-            score.setX(50);
-            score.setY(50);
+            score.setX(10);
+            score.setY(20);
+            score.setFill(Color.WHITE);
         }
 
     /**
@@ -63,8 +64,8 @@ public class SpaceInvaders extends Application
      */
     private void addInvaders()
         {
-            Image alien1 = new Image("Alien1.png", 30, 30, false, true);
-            Image shipPic = new Image("Ship.png", 50, 30, true, true);
+            Image alien1 = new Image("Alien.png", 40, 30, false, true);
+            Image shipPic = new Image("Ship.png", 65, 40, true, true);
             ship = new ImageView(shipPic);
             ship.setX(300);
             ship.setY(420);
@@ -151,11 +152,11 @@ public class SpaceInvaders extends Application
      */  
     private void makeBullet()
         {
-            Image bulletPic = new Image("Bullet.png");
+            Image bulletPic = new Image("Bullet.png", 10, 25, true, false);
             bullet = new ImageView(bulletPic);
             background.getChildren().add(bullet);
-            bullet.setX(ship.getX() + 25);
-            bullet.setY(ship.getY() - 25);
+            bullet.setX(ship.getX() + 32);
+            bullet.setY(ship.getY() - 30);
             fireBullet();
         }
 
@@ -172,7 +173,7 @@ public class SpaceInvaders extends Application
                             timeline.stop();
                         }
                     };
-                    keyFrame = new KeyFrame(Duration.seconds(0.025), moveBullet);
+                    keyFrame = new KeyFrame(Duration.seconds(0.02), moveBullet);
                     timeline = new Timeline();
                     timeline.setCycleCount(Timeline.INDEFINITE);
                     timeline.getKeyFrames().add(keyFrame);
@@ -192,9 +193,9 @@ public class SpaceInvaders extends Application
             s += 10;
             score.setText("Score: " + s);
             background.getChildren().remove(bullet);
+            background.getChildren().remove(alien);
             int index = invaders.indexOf(alien);
             invaders.remove(index);
-            background.getChildren().remove(alien);
         }
     }
     
