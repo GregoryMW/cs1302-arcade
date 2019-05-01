@@ -173,7 +173,6 @@ public class SpaceInvaders extends Application
                     }
                     if(ship.getBoundsInLocal().intersects(a.getBoundsInLocal()))
                     {
-                        timeline.stop();
                         crash = new ImageView(new Image
                                               ("Crash.png", 65, 40, true, true));
                         crash.setX(ship.getX());
