@@ -35,10 +35,11 @@ public class SpaceInvaders extends Application
     Group screen;
     Scene spaceInvaders;
     Pane background;
-    // Creation of the list of invaders as well as the ship and bullet objects
+    // Creation of the list of invaders as well as the ship, bullet, and crash objects
     ArrayList<ImageView> invaders;
     ImageView ship;
     ImageView bullet;
+    ImageView crash;
     // These values will be initialized for movement control of the aliens
     Boolean moveRight;
     Boolean movedDown;
@@ -109,9 +110,10 @@ public class SpaceInvaders extends Application
      * ship in. Also has bounds checks as well.
      */
     private void moveShip(KeyCode key) {
-        if (key == KeyCode.LEFT && ship.getX() > 10){
+        if (key == KeyCode.LEFT && ship.getX() > 10 && background.getChildren().contains(ship)){
             ship.setX(ship.getX() - 10.0);}
-        if (key == KeyCode.RIGHT && ship.getX() + 50 < 630){
+        if (key == KeyCode.RIGHT && ship.getX() + 50 < 630 &&
+            background.getChildren().contains(ship)){
             ship.setX(ship.getX() + 10.0);}
     }
 
@@ -127,20 +129,7 @@ public class SpaceInvaders extends Application
                     setMovement(true);
                     EventHandler<ActionEvent> moveAliens = e -> {
                         setDown(false);
-                        invaders.stream().forEach(a -> {
-                                if (a.getX() >= 580 && getMovement())
-                                {
-                                    moveDown();
-                                    setDown(true);
-                                    setMovement(false);
-                                }
-                                if (a.getX() <= 40 && getMovement() == false)
-                                {
-                                    moveDown();
-                                    setDown(true);
-                                    setMovement(true);
-                                }
-                            });
+                        movementCheck();
                         if (getMovement() && getDown() == false)
                         {
                             moveRight();
@@ -152,10 +141,7 @@ public class SpaceInvaders extends Application
                         if (invaders.size() == 0)
                         {
                             timeline.stop();
-                            l ++;
-                            level.setText("Level: " + l);
-                            addInvaders();
-                            moveAliens(speed + speed/2);
+                            endLevel(speed + speed/2);
                         }
                     };
                     keyFrame = new KeyFrame(Duration.seconds(speed), moveAliens);
@@ -166,6 +152,51 @@ public class SpaceInvaders extends Application
             });
             t.setDaemon(true);
             t.start();
+        }
+
+    /**
+     * Helper method for moveAliens() method */
+    public void movementCheck()
+        {
+            invaders.stream().forEach(a -> {
+                    if (a.getX() >= 580 && getMovement())
+                    {
+                        moveDown();
+                        setDown(true);
+                        setMovement(false);
+                    }
+                    if (a.getX() <= 40 && getMovement() == false)
+                    {
+                        moveDown();
+                        setDown(true);
+                        setMovement(true);
+                    }
+                    if(ship.getBoundsInLocal().intersects(a.getBoundsInLocal()))
+                    {
+                        timeline.stop();
+                        crash = new ImageView(new Image
+                                              ("Crash.png", 65, 40, true, true));
+                        crash.setX(ship.getX());
+                        crash.setY(ship.getY());
+                        background.getChildren().add(crash);
+                        background.getChildren().remove(ship);
+                        Text over = new Text("Game Over");
+                        over.setX(200);
+                        over.setY(220);
+                        over.setFill(Color.WHITE);
+                        over.setFont(new Font(50));
+                        background.getChildren().add(over);
+                    }
+                });
+        }
+
+    /** Helper method for moveAliens method. */
+    public void endLevel(double speed)
+        {
+            l ++;
+            level.setText("Level: " + l);
+            addInvaders();
+            moveAliens(speed);
         }
 
     /** Sets the movement direction of the aliens.*/
@@ -307,7 +338,7 @@ public class SpaceInvaders extends Application
     public void start(Stage stage)
         {
             setup();
-            moveAliens(0.5);
+            moveAliens(0.1);
             screen.requestFocus();
             screen.setOnKeyPressed(inputCheck());
             stage.setTitle("Space Invaders");
