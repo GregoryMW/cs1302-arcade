@@ -18,10 +18,25 @@ import javafx.geometry.*;
 
 public class Twenty48 extends ArcadeApp
 {
-    Scene twenty48;
 
-    public Scene getScene()
+    Scene scene2048;
+    Gridpane grid;
+
+
+    public void setup()
         {
-            return twenty48;
+            grid = new GridPane();
+        }
+    
+    /** {@inheritdoc} */
+    @Override
+    public void start(Stage stage)
+        {
+            screen.requestFocus();
+            stage.setTitle("2048");
+            stage.setScene(scene2048);
+            stage.sizeToScene();
+            stage.setResizable(false);
+            stage.show();
         }
 }
