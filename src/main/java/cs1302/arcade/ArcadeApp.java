@@ -24,7 +24,6 @@ public class ArcadeApp extends Application
     HBox menuScreen = new HBox(20);
     VBox spaceInvaderOpt = new VBox();
     VBox twenty48Opt = new VBox(40);
-    SpaceInvaders spaceInvaders = new SpaceInvaders();
     Stage spi;
     Stage tfe;
     Button sIStart;
@@ -45,6 +44,7 @@ public class ArcadeApp extends Application
             ImageView logo2 = new ImageView(twenty48Pic);
             twenty48Start = new Button();
             twenty48Start.setGraphic(logo2);
+            twenty48Start.setOnAction(launch2048());
             Image backgroundPic = new Image("retroBG.jpg", 640, 480, false, true);
             menuScreen.setBackground(
                 new Background(new BackgroundImage(
@@ -79,6 +79,24 @@ public class ArcadeApp extends Application
                 };
             return handler;
         }
+
+    public EventHandler<ActionEvent> launch2048()
+        {
+            tfe = new Stage();
+            EventHandler<ActionEvent> handler =  e ->
+            {
+                Thread t = new Thread(() -> {
+                        Platform.runLater(() -> new Twenty48().start(tfe));
+                        sIStart.setDisable(true);
+                        twenty48Start.setDisable(true);
+                });
+                t.setDaemon(true);
+                t.start();
+            };
+            return handler;
+        }
+                
+                            
 
     /** {@inheritdoc} */
     @Override

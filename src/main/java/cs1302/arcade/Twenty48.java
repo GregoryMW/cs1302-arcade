@@ -16,22 +16,27 @@ import javafx.scene.image.*;
 import javafx.scene.control.*;
 import javafx.geometry.*;
 
-public class Twenty48 extends ArcadeApp
+public class Twenty48 extends Application
 {
 
+    Group screen;
     Scene scene2048;
-    Gridpane grid;
+    GridPane grid;
 
 
     public void setup()
         {
+            screen = new Group();
+            scene2048 = new Scene(screen, 480, 640);
             grid = new GridPane();
+            screen.getChildren().add(grid);
         }
     
     /** {@inheritdoc} */
     @Override
     public void start(Stage stage)
         {
+            setup();
             screen.requestFocus();
             stage.setTitle("2048");
             stage.setScene(scene2048);
