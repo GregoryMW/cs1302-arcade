@@ -21,15 +21,22 @@ public class Twenty48 extends Application
 
     Group screen;
     Scene scene2048;
-    GridPane grid;
-
+    TilePane tile;
 
     public void setup()
         {
             screen = new Group();
             scene2048 = new Scene(screen, 480, 640);
-            grid = new GridPane();
-            screen.getChildren().add(grid);
+            tile = new TilePane();
+            createInitialTiles();
+            screen.getChildren().add(tile);
+        }
+
+    public void createInitialTiles()
+        {
+            tile.setHgap(66);
+            tile.setPrefColumns(4);
+            tile.getChildren().add(new ImageView(new Image("2.png")));
         }
     
     /** {@inheritdoc} */

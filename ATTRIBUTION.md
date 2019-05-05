@@ -27,3 +27,9 @@ authored by members of your project team.
 * https://www.spriters-resource.com/arcade/spaceinv/sheet/115520/
 * Creative Commons Attribution 3.0 Unported (CC BY 3.0)
 
+## 2048 Tiles
+* `src/main/resources/*.png`
+* nazywam. "2048 Tiles" November 15, 2014
+* https://opengameart.org/content/2048-tiles
+* Creative Commons CC0 1.0 Universal (CC0 1.0)
+

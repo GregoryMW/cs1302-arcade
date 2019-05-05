@@ -21,9 +21,7 @@ import javafx.stage.WindowEvent;
 /** an arcade app with the games Space Invaders and 2048. */
 public class ArcadeApp extends Application
 {
-    HBox menuScreen = new HBox(20);
-    VBox spaceInvaderOpt = new VBox();
-    VBox twenty48Opt = new VBox(40);
+    HBox menuScreen = new HBox(100);
     Stage spi;
     Stage tfe;
     Button sIStart;
@@ -45,18 +43,14 @@ public class ArcadeApp extends Application
             twenty48Start = new Button();
             twenty48Start.setGraphic(logo2);
             twenty48Start.setOnAction(launch2048());
-            Image backgroundPic = new Image("retroBG.jpg", 640, 480, false, true);
+            Image backgroundPic = new Image("retroBG.png", 640, 480, false, true);
             menuScreen.setBackground(
                 new Background(new BackgroundImage(
                                    backgroundPic,BackgroundRepeat.NO_REPEAT,
                                    BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                                    BackgroundSize.DEFAULT)));
             menuScreen.setAlignment(Pos.CENTER);
-            spaceInvaderOpt.getChildren().add(sIStart);
-            spaceInvaderOpt.setAlignment(Pos.CENTER);
-            twenty48Opt.getChildren().add(twenty48Start);
-            twenty48Opt.setAlignment(Pos.CENTER);
-            menuScreen.getChildren().addAll(spaceInvaderOpt, twenty48Opt);
+            menuScreen.getChildren().addAll(sIStart, twenty48Start);
         }
 
     /**
@@ -80,6 +74,11 @@ public class ArcadeApp extends Application
             return handler;
         }
 
+    /**
+     * when the 2048 button is pushed, launches a new window
+     * that runs the game.
+     * @return handler the action event to launch the game.
+     */
     public EventHandler<ActionEvent> launch2048()
         {
             tfe = new Stage();
@@ -104,6 +103,10 @@ public class ArcadeApp extends Application
         {
             startMenu();
             spi.setOnCloseRequest((WindowEvent event) -> {
+                    sIStart.setDisable(false);
+                    twenty48Start.setDisable(false);
+                });
+            tfe.setOnCloseRequest((WindowEvent event) -> {
                     sIStart.setDisable(false);
                     twenty48Start.setDisable(false);
                 });
