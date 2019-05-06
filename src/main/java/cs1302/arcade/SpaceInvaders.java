@@ -186,7 +186,7 @@ public class SpaceInvaders extends Application
                         crash.setY(ship.getY());
                         background.getChildren().add(crash);
                         background.getChildren().remove(ship);
-                        Text over = new Text("Game Over\nPress Q to quit");
+                        Text over = new Text("Game Over");
                         over.setX(250);
                         over.setY(220);
                         over.setFill(Color.WHITE);

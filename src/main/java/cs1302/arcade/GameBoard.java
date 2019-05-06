@@ -406,7 +406,7 @@ public class GameBoard
             {
                 if (tiles.get(i).getImage() == tile2048)
                 {
-                    Text win = new Text("You Win!\nPress Q to quit");
+                    Text win = new Text("You Win!");
                     win.setX(75);
                     win.setY(200);
                     win.setFont(new Font(35));
