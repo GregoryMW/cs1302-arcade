@@ -282,11 +282,11 @@ public class GameBoard
                 {
                     if (tiles.get(i + 1).getImage() == null)
                     {
-                        canMoveRight = true;
+                        return true;
                     }
                     else if (tiles.get(i + 1).getImage() == tiles.get(i).getImage())
                     {
-                        canMoveRight = true;
+                        return true;
                     }
                 }
             }
@@ -306,11 +306,11 @@ public class GameBoard
                 {
                     if (tiles.get(i - 1).getImage() == null)
                     {
-                        canMoveLeft = true;
+                        return true;
                     }
                     else if (tiles.get(i - 1).getImage() == tiles.get(i).getImage())
                     {
-                        canMoveLeft = true;
+                        return true;
                     }
                 }
             }
@@ -354,11 +354,11 @@ public class GameBoard
                 {
                     if (tiles.get(i + 4).getImage() == null)
                     {
-                        canMoveDown = true;
+                        return true;
                     }
                     else if (tiles.get(i + 4).getImage() == tiles.get(i).getImage())
                     {
-                        canMoveDown = true;
+                        return true;
                     }
                 }
             }
@@ -472,11 +472,11 @@ public class GameBoard
             {
                 if (tiles.get(i).getImage() == tile2048)
                 {
-                    for (int i = 0; i < 16; i ++)
+                    for (int j = 0; j < 16; j ++)
                     {
-                        if (tiles.get(i).getImage() == null)
+                        if (tiles.get(j).getImage() == null)
                         {
-                            tiles.get(i).setImage(new Image("WinTile.png"));
+                            tiles.get(j).setImage(new Image("WinTile.png"));
                         }
                     }
                     Text win = new Text("You Win!");
@@ -484,6 +484,7 @@ public class GameBoard
                     win.setY(200);
                     win.setFont(new Font(35));
                     pane.getChildren().add(win);
+                    break;
                 }
             }
         }
