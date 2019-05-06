@@ -139,7 +139,6 @@ public class GameBoard
                     {
                         tiles.get(i + 1).setImage(tiles.get(i).getImage());
                         tiles.get(i).setImage(null);
-                        canMoveRight = true;
                         moveRight();
                         moved = true;
                     }
@@ -154,19 +153,12 @@ public class GameBoard
                             multiply(i + 1);
                             hasMult.add(tiles.get(i + 1));
                             tiles.get(i).setImage(null);
-                            canMoveRight = true;
                             moved = true;
                             scoreText.setText("Score: " + score);
                         }
                     }
-                    else
-                    {
-                        canMoveRight = false;
-                    }
                 }
             }
-            checkIfWon();
-            checkMove();
         }
 
     /**
@@ -186,7 +178,6 @@ public class GameBoard
                     {
                         tiles.get(i - 1).setImage(tiles.get(i).getImage());
                         tiles.get(i).setImage(null);
-                        canMoveLeft = true;
                         moveLeft();
                         moved = true;
                     }
@@ -198,19 +189,13 @@ public class GameBoard
                             multiply(i - 1);
                             hasMult.add(tiles.get(i - 1));
                             tiles.get(i).setImage(null);
-                            canMoveLeft = true;
                             moved = true;
                             scoreText.setText("Score: " + score);
                         }
                     }
-                    else
-                    {
-                        canMoveLeft = false;
-                    }
+
                 }
             }
-            checkIfWon();
-            checkMove();
         }
 
     /**
@@ -229,7 +214,6 @@ public class GameBoard
                     {
                         tiles.get(i - 4).setImage(tiles.get(i).getImage());
                         tiles.get(i).setImage(null);
-                        canMoveUp = true;
                         moveUp();
                         moved = true;
                     }
@@ -241,19 +225,13 @@ public class GameBoard
                             multiply(i - 4);
                             hasMult.add(tiles.get(i - 4));
                             tiles.get(i).setImage(null);
-                            canMoveUp = true;
                             moved = true;
                             scoreText.setText("Score: " + score);
                         }
                     }
-                    else
-                    {
-                        canMoveUp = false;
-                    }
+
                 }
             }
-            checkIfWon();
-            checkMove();
         }
 
     /**
@@ -272,7 +250,6 @@ public class GameBoard
                     {
                         tiles.get(i + 4).setImage(tiles.get(i).getImage());
                         tiles.get(i).setImage(null);
-                        canMoveDown = true;
                         moveDown();
                         moved = true;
                     }
@@ -284,19 +261,108 @@ public class GameBoard
                             multiply(i + 4);
                             hasMult.add(tiles.get(i + 4));
                             tiles.get(i).setImage(null);
-                            canMoveDown = true;
                             moved = true;
                             scoreText.setText("Score: " + score);
                         }
                     }
-                    else
+                }
+            }
+        }
+
+    /** 
+     * A method that will check if there is at least one tile that can be
+     * moved to the right.
+     * @return true if at least one tile can move right, false otherwise
+     */
+    public boolean canMoveRight()
+        {
+            for (int i = 15; i >= 0; i --)
+            {
+                if (i % 4 != 3 && tiles.get(i).getImage() != null)
+                {
+                    if (tiles.get(i + 1).getImage() == null)
                     {
-                        canMoveDown = false;
+                        canMoveRight = true;
+                    }
+                    else if (tiles.get(i + 1).getImage() == tiles.get(i).getImage())
+                    {
+                        canMoveRight = true;
                     }
                 }
             }
-            checkIfWon();
-            checkMove();
+            return false;
+        }
+
+    /** 
+     * A method that will check if there is at least one tile that can be
+     * moved to the left.
+     * @return true if at least one tile can move left, false otherwise
+     */
+    public boolean canMoveLeft()
+        {
+            for (int i = 0; i < 16; i ++)
+            {
+                if (i % 4 != 0 && tiles.get(i).getImage() != null)
+                {
+                    if (tiles.get(i - 1).getImage() == null)
+                    {
+                        canMoveLeft = true;
+                    }
+                    else if (tiles.get(i - 1).getImage() == tiles.get(i).getImage())
+                    {
+                        canMoveLeft = true;
+                    }
+                }
+            }
+            return false;
+        }
+
+    /** 
+     * A method that will check if there is at least one tile that can be
+     * moved up.
+     * @return true if at least one tile can move up, false otherwise
+     */
+    public boolean canMoveUp()
+        {
+            for (int i = 0; i < 16; i ++)
+            {
+                if (i > 3 && tiles.get(i).getImage() != null)
+                {
+                    if (tiles.get(i - 4).getImage() == null)
+                    {
+                        return true;
+                    }
+                    else if (tiles.get(i - 4).getImage() == tiles.get(i).getImage())
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+    /** 
+     * A method that will check if there is at least one tile that can be
+     * moved down.
+     * @return true if at least one tile can move down, false otherwise
+     */
+    public boolean canMoveDown()
+        {
+            for (int i = 15; i >= 0; i --)
+            {
+                if (i < 12 && tiles.get(i).getImage() != null)
+                {
+                    if (tiles.get(i + 4).getImage() == null)
+                    {
+                        canMoveDown = true;
+                    }
+                    else if (tiles.get(i + 4).getImage() == tiles.get(i).getImage())
+                    {
+                        canMoveDown = true;
+                    }
+                }
+            }
+            return false;
         }
 
     /**
@@ -388,8 +454,8 @@ public class GameBoard
                     end = false;
                 }
             }
-            if (end && canMoveUp == false && canMoveDown == false
-                && canMoveLeft == false && canMoveRight == false)
+            if (end && canMoveUp() == false && canMoveDown() == false
+                && canMoveLeft() == false && canMoveRight() == false)
             {
                 Text over = new Text("Game Over");
                 over.setX(50);
@@ -406,6 +472,13 @@ public class GameBoard
             {
                 if (tiles.get(i).getImage() == tile2048)
                 {
+                    for (int i = 0; i < 16; i ++)
+                    {
+                        if (tiles.get(i).getImage() == null)
+                        {
+                            tiles.get(i).setImage(new Image("WinTile.png"));
+                        }
+                    }
                     Text win = new Text("You Win!");
                     win.setX(75);
                     win.setY(200);

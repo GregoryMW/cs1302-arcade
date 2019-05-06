@@ -37,41 +37,40 @@ public class Twenty48 extends Application
                         // in a single move
                         board.newHasMult();
                         board.moveRight();
-                        if (board.getMoved())
-                        {
-                            // If any of the tiles moved, then add a new tile to the board
-                            board.placeRandom(1);
-                        }
+                        inputHelper();
                     }
                     else if (event.getCode() == KeyCode.LEFT)
                     {
                         board.newHasMult();
                         board.moveLeft();
-                        if (board.getMoved())
-                        {
-                            board.placeRandom(1);
-                        }
+                        inputHelper();
                     }
                     else if (event.getCode() == KeyCode.UP)
                     {
                         board.newHasMult();
                         board.moveUp();
-                        if (board.getMoved())
-                        {
-                            board.placeRandom(1);
-                        }
+                        inputHelper();
                     }
                     else if (event.getCode() == KeyCode.DOWN)
                     {
                         board.newHasMult();
                         board.moveDown();
-                        if (board.getMoved())
-                        {
-                            board.placeRandom(1);
-                        }
+                        inputHelper();
                     }
                 }
             };
+        }
+
+    /** A helper method for inputCheck to reduce redundancy.*/
+    public void inputHelper()
+        {
+            if (board.getMoved())
+            {
+                // If any of the tiles were moved, then add a new tile to the board
+                board.placeRandom(1);
+            }
+            board.checkIfWon();
+            board.checkMove();
         }
     
     /** {@inheritdoc} */

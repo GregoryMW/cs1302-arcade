@@ -53,7 +53,7 @@ Here is a sample entry (delete this line; also: feel free to copy/paste/modify):
 3. **PROB:** Had issues with git not moving the master branch with the HEAD branch. Not much with the
     game itself.
 
-## MON 2019-05-06 12:50 PM EST
+## MON 2019-05-06 5:00 PM EST
 
 1. **DONE:** Completed the arcade application :)
 
