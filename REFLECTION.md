@@ -51,4 +51,12 @@ Here is a sample entry (delete this line; also: feel free to copy/paste/modify):
     Also need to fix alien movement a bit. Also need to begin work on 2048 game.
 
 3. **PROB:** Had issues with git not moving the master branch with the HEAD branch. Not much with the
-    game itself.              
+    game itself.
+
+## MON 2019-05-06 12:50 PM EST
+
+1. **DONE:** Completed the arcade application :)
+
+2. **TODO:** Submit the project.
+
+3. **PROB:** In the end, nothing too serious enough to give us a difficult time.            

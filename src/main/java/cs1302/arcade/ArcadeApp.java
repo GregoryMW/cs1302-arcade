@@ -5,7 +5,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
@@ -65,6 +64,8 @@ public class ArcadeApp extends Application
                 {
                     Thread t = new Thread(() -> {
                             Platform.runLater(() -> new SpaceInvaders().start(spi));
+                            // Disables the buttons while the game is running so the user cannot
+                            // open an unlimited amount of windows
                             sIStart.setDisable(true);
                             twenty48Start.setDisable(true);
                     });
@@ -94,14 +95,14 @@ public class ArcadeApp extends Application
             };
             return handler;
         }
-                
-                            
 
     /** {@inheritdoc} */
     @Override
     public void start(Stage stage)
         {
             startMenu();
+            // When a game window is closed, wil re-enable the buttons so that
+            // the game may be started again
             spi.setOnCloseRequest((WindowEvent event) -> {
                     sIStart.setDisable(false);
                     twenty48Start.setDisable(false);

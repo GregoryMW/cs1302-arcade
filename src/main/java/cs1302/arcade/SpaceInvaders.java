@@ -6,7 +6,6 @@ import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.text.*;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
@@ -58,7 +57,7 @@ public class SpaceInvaders extends Application
      * Creates the score board, level counter, ship,  and the scene. calls the addInvaders method
      * as well as a list of imageviews in order to track the amount of aliens on screen.
      */
-    private void setup()
+    public void setup()
         {
             s = 0;
             score = new Text("Score: " + s);
@@ -88,7 +87,7 @@ public class SpaceInvaders extends Application
     /**
      *  Adds the 40 aliens to the scene, 10 in each row.
      */
-    private void addInvaders()
+    public void addInvaders()
         {
             Image alien1 = new Image("Alien.png", 40, 30, false, true);
             int count = 0;
@@ -108,8 +107,9 @@ public class SpaceInvaders extends Application
     /**
      * Uses a key input to determine which direction, left or right, to move the
      * ship in. Also has bounds checks as well.
+     * @param key the keycode to check which direction the player is inputting
      */
-    private void moveShip(KeyCode key) {
+    public void moveShip(KeyCode key) {
         if (key == KeyCode.LEFT && ship.getX() > 10 && background.getChildren().contains(ship)){
             ship.setX(ship.getX() - 10.0);}
         if (key == KeyCode.RIGHT && ship.getX() + 50 < 630 &&
@@ -122,8 +122,9 @@ public class SpaceInvaders extends Application
      * Scene window, the aliens will move down, and begin to move in the opposite
      * direction it was going in before. The speed of the aliens will increase after
      * clearing the screen and moving on to the next level.
+     * @param speed the speed the aliens move at
      */
-    private void moveAliens(double speed)
+    public void moveAliens(double speed)
         {
             Thread t = new Thread (() -> {
                     setMovement(true);
@@ -140,6 +141,8 @@ public class SpaceInvaders extends Application
                         }
                         if (invaders.size() == 0)
                         {
+                            // If all invaders are destroyed, restarts the game
+                            // With a new level of faster moving aliens
                             timeline.stop();
                             endLevel(speed + speed/2);
                         }
@@ -159,8 +162,11 @@ public class SpaceInvaders extends Application
     public void movementCheck()
         {
             invaders.stream().forEach(a -> {
+                    // Checks if the aliens have reached the edges of the screen
                     if (a.getX() >= 580 && getMovement())
                     {
+                        // Once the aliens reach the edge, the will move down and
+                        // begin to move in the direction opposite of the previous
                         moveDown();
                         setDown(true);
                         setMovement(false);
@@ -171,6 +177,7 @@ public class SpaceInvaders extends Application
                         setDown(true);
                         setMovement(true);
                     }
+                    // Ends the game if the aliens crash into the player's ship
                     if(ship.getBoundsInLocal().intersects(a.getBoundsInLocal()))
                     {
                         crash = new ImageView(new Image
@@ -179,17 +186,20 @@ public class SpaceInvaders extends Application
                         crash.setY(ship.getY());
                         background.getChildren().add(crash);
                         background.getChildren().remove(ship);
-                        Text over = new Text("Game Over");
-                        over.setX(200);
+                        Text over = new Text("Game Over\nPress Q to quit");
+                        over.setX(250);
                         over.setY(220);
                         over.setFill(Color.WHITE);
-                        over.setFont(new Font(50));
+                        over.setFont(new Font(35));
                         background.getChildren().add(over);
                     }
                 });
         }
 
-    /** Helper method for moveAliens method. */
+    /**
+     * Helper method for moveAliens method.
+     * @param speed the speed at which the aliens move at
+     */
     public void endLevel(double speed)
         {
             l ++;
@@ -198,13 +208,19 @@ public class SpaceInvaders extends Application
             moveAliens(speed);
         }
 
-    /** Sets the movement direction of the aliens.*/
+    /**
+     * Sets the movement direction of the aliens.
+     * @param move the truth value that tells if the aliens will move right or left
+     */
     public void setMovement(boolean move)
         {
             moveRight = move;
         }
 
-    /** Returns the boolean value of the current direction the aliens are moving in.*/
+    /** 
+     * Returns the boolean value of the current direction the aliens are moving in.
+     * @return moveRight true if the aliens are moving right, false if they are moving left
+     */
     public boolean getMovement()
         {
             return moveRight;
@@ -214,13 +230,17 @@ public class SpaceInvaders extends Application
      * Used to indicate that the aliens have moved down in the current
      * keyframe. This allows the aliens to only move down, then continue their
      * left or right movement.
+     * @param move the truth value to tell if the aliens have moved down
      */
     public void setDown(boolean move)
         {
             movedDown = move;
         }
 
-    /** Determines if the aliens have moved down or not. */
+    /**
+     * Determines if the aliens have moved down or not.
+     * @return movedDown true if the aliens have moved down, false if not
+     */
     public boolean getDown()
         {
             return movedDown;
@@ -254,7 +274,7 @@ public class SpaceInvaders extends Application
      *  Initializes the bullet object
      *  and sets the bullet to come out of the top of the ship
      */  
-    private void makeBullet()
+    public void makeBullet()
         {
             Image bulletPic = new Image("Bullet.png", 10, 25, true, false);
             bullet = new ImageView(bulletPic);
@@ -275,6 +295,7 @@ public class SpaceInvaders extends Application
             Thread t = new Thread (() -> {
                     EventHandler<ActionEvent> moveBullet = e -> {
                         Platform.runLater(() -> bullet.setY(bullet.getY() - 5));
+                        // If the bullet reaches the top of the screen
                         if (bullet.getY() < 0)
                         {
                             Platform.runLater(() -> background.getChildren().remove(bullet));
@@ -282,6 +303,7 @@ public class SpaceInvaders extends Application
                         }
                         for (ImageView alien : invaders)
                         {
+                            // If the bullet hits
                             if(bullet.getBoundsInLocal().intersects(alien.getBoundsInLocal()))
                             {
                                 s += 10;
@@ -311,8 +333,9 @@ public class SpaceInvaders extends Application
      * This checks which control input has been pressed in order to call the
      * appropriate movement method, the firing of the bullet, or the
      * movement of the ship.
+     * @return event the EventHandler that gives the key pressed
      */
-    private EventHandler<? super KeyEvent> inputCheck()
+    public EventHandler<? super KeyEvent> inputCheck()
         {
             return event -> {
                 {
@@ -337,6 +360,7 @@ public class SpaceInvaders extends Application
     public void start(Stage stage)
         {
             setup();
+            // Sets the inital speed of the aliens to move every 0.5 seconds
             moveAliens(0.5);
             screen.requestFocus();
             screen.setOnKeyPressed(inputCheck());
